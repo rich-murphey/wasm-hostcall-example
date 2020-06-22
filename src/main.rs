@@ -47,10 +47,12 @@ pub fn logint(s: i32) -> i32 {
     println!("int: {}", s);
     2345
 }
+
 pub fn logstr(offset: i32, length: i32) -> i32 {
     println!("str: {}", mem_str(offset, length));
     3456
 }
+
 pub fn logab(offset: i32, length: i32) -> i32 {
     println!("struct: {:?}", mem_struct::<AB>(offset, length));
     3456
