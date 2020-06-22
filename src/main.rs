@@ -10,7 +10,11 @@ use {
         Module,
         Memory,
         Store,
-    }
+    },
+    serde::{
+        Deserialize,
+        Serialize
+    },
 };
 
 static mut MEM: Option<Memory> = None;
@@ -23,12 +27,32 @@ fn mem_str<'a>(offset: i32, length: i32) -> &'a str {
     std::str::from_utf8(bytes).unwrap()
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AB {
+    pub a: u32,
+    pub b: String,
+}
+
+fn mem_struct<'a, T: Deserialize::<'a>>(offset: i32, length: i32) -> T {
+    let v: T = rmp_serde::from_slice(
+        unsafe {
+            &MEM.as_ref().unwrap()
+                .data_unchecked()[offset as usize..][..length as usize]
+        }
+    ).unwrap();
+    v
+}
+
 pub fn logint(s: i32) -> i32 {
     println!("int: {}", s);
     2345
 }
-pub fn logstring(s: i32, l: i32) -> i32 {
-    println!("str: {}", mem_str(s, l));
+pub fn logstr(offset: i32, length: i32) -> i32 {
+    println!("str: {}", mem_str(offset, length));
+    3456
+}
+pub fn logab(offset: i32, length: i32) -> i32 {
+    println!("struct: {:?}", mem_struct::<AB>(offset, length));
     3456
 }
 
@@ -38,7 +62,8 @@ fn main() -> Result<()> {
     let module = Module::from_file(store.engine(), wasm_file)?;
     let instance = Instance::new(&store, &module, &[
         Func::wrap(&store, logint).into(),
-        Func::wrap(&store, logstring).into(),
+        Func::wrap(&store, logstr).into(),
+        Func::wrap(&store, logab).into(),
     ])?;
     unsafe {
         MEM = Some(instance
