@@ -1,20 +1,24 @@
-use anyhow::{format_err, Context, Result};
-use wasmtime::{
-    Func,
-    Instance, 
-    // Linker,
-    Module,
-    Memory,
-    Store,
-    // Trap
+use {
+    anyhow::{
+        format_err,
+        Context,
+        Result
+    },
+    wasmtime::{
+        Func,
+        Instance, 
+        Module,
+        Memory,
+        Store,
+    }
 };
-// use wasmtime_wasi::{Wasi, WasiCtx};
-// use wasm_bindgen::prelude::*;
+
 static mut MEM: Option<Memory> = None;
-fn mem_str<'a>(s: i32, l: i32) -> &'a str {
+
+fn mem_str<'a>(offset: i32, length: i32) -> &'a str {
     let bytes = unsafe {
         &MEM.as_ref().unwrap()
-            .data_unchecked()[s as usize..][..l as usize]
+            .data_unchecked()[offset as usize..][..length as usize]
     };
     std::str::from_utf8(bytes).unwrap()
 }
@@ -24,12 +28,12 @@ pub fn logint(s: i32) -> i32 {
     2345
 }
 pub fn logstring(s: i32, l: i32) -> i32 {
-    // println!("len: {}", l);
     println!("str: {}", mem_str(s, l));
     3456
 }
 
-pub fn run(wasm_file: &str) -> Result<()> {
+fn main() -> Result<()> {
+    let wasm_file = "hello/pkg/hello_bg.wasm";
     let store = Store::default();
     let module = Module::from_file(store.engine(), wasm_file)?;
     let instance = Instance::new(&store, &module, &[
@@ -40,7 +44,7 @@ pub fn run(wasm_file: &str) -> Result<()> {
         MEM = Some(instance
                    .get_memory("memory")
                    .ok_or(format_err!("failed to find `memory` export"))?);
-    }    
+    }
     let func = instance
         .get_func("hello")
         .ok_or(format_err!("failed to find export: hello()"))?
@@ -49,10 +53,5 @@ pub fn run(wasm_file: &str) -> Result<()> {
     let res = func();
     println!("result of hello(): {:?}", res);
     println!("done.");
-    Ok(())
-}
-
-pub fn main() -> Result<()> {
-    run("hello/pkg/hello_bg.wasm")?;
     Ok(())
 }
