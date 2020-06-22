@@ -1,0 +1,16 @@
+[package]
+name = "hello"
+version = "0.1.0"
+authors = ["rich-murphey <rich@murphey.org>"]
+edition = "2018"
+# description = "wasm test"
+# repository = "none"
+# license = "none"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# wasm-bindgen = "0.2.37"
+wasm-bindgen = "0.2.63"
+wee_alloc = "0.4.5"

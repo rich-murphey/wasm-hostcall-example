@@ -1,0 +1,29 @@
+#
+# compiler flags are in ./.cargo/config
+[package]
+authors = ["White Oak Labs, Inc <info@whiteoaklabs.com>"]
+name = "wasmtest"
+version = "0.1.15"
+edition = "2018"
+
+[profile.release]
+debug = false
+opt-level = 3
+# codegen-units = 1
+lto = true
+
+# [target.'cfg(not(target_os = "macos"))'.profile.release]
+# lto = "fat"
+# # lto = "thin"
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+
+[dependencies]
+anyhow = "1.0.31"
+wasm-bindgen = "0.2.63"
+# wasm-bindgen = "0.2.63"
+wasmtime = "0.18.0"
+wasmtime-wasi = "0.18.0"
