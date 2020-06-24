@@ -13,11 +13,7 @@ pub struct AB {
     pub b: String,
 }
 
-// #[wasm_bindgen] does not support returning Result<i32,JsValue> from
-// extern fn.
-
-#[no_mangle]
-extern "C" {
+extern {
     fn logint_(s: i32);
     fn logab_ (s: &[u8]);
     fn logstr_(s: &[u8]);
