@@ -59,6 +59,7 @@ fn main() -> Result<()> {
     let store = Store::default();
     let module = Module::from_file(store.engine(), wasm_file)?;
     let instance = Instance::new(&store, &module, &[
+        // the bindings break if you change the order.
         Func::wrap(&store, logstr).into(),
         Func::wrap(&store, logint).into(),
         Func::wrap(&store, logab).into(),
