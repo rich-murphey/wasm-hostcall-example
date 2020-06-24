@@ -14,9 +14,12 @@ pub struct AB {
 }
 
 extern {
+    // this breaks if you change the order.
+    #[allow(improper_ctypes)]
+    fn logstr_(a: &[u8]);
     fn logint_(s: i32);
+    #[allow(improper_ctypes)]
     fn logab_ (s: &[u8]);
-    fn logstr_(s: &[u8]);
 }
 
 fn logint(s: i32) {

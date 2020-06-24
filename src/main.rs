@@ -25,7 +25,6 @@ pub struct AB {
     pub b: String,
 }
 
-
 fn slice_from<'a>(offset: i32, length: i32) -> &'a [u8] {
     unsafe {
         &MEM.as_ref().unwrap()
@@ -43,26 +42,16 @@ fn struct_from_rmps<'a, T: Deserialize::<'a>>(offset: i32, length: i32) -> T {
     rmp_serde::from_slice(slice).unwrap()
 }
 
-
 pub fn logint(s: i32) {
     println!("int: {}", s);
 }
 
-// (i64 vmctx, i64, i32) -> i32 system_v
-// (i64 vmctx, i64, i32, i32) -> i32 system_v
-// pub fn logstr(vmctx: i64, x: i64, offset: i32, length: i32) -> i32 {
-
-// pub fn logstr(a: f32, c: i64, x: i64, offset: i32, length: i32) -> i32 {
-//     println!("str: {}", str_from(offset, length));
-//     3456
-// }
+pub fn logab(offset: i32, length: i32) {
+    println!("struct: {:?}", struct_from_rmps::<AB>(offset, length));
+}
 
 pub fn logstr(offset: i32, length: i32) {
     println!("str: {}", str_from(offset, length));
-}
-
-pub fn logab(offset: i32, length: i32) {
-    println!("struct: {:?}", struct_from_rmps::<AB>(offset, length));
 }
 
 fn main() -> Result<()> {
@@ -70,9 +59,9 @@ fn main() -> Result<()> {
     let store = Store::default();
     let module = Module::from_file(store.engine(), wasm_file)?;
     let instance = Instance::new(&store, &module, &[
+        Func::wrap(&store, logstr).into(),
         Func::wrap(&store, logint).into(),
         Func::wrap(&store, logab).into(),
-        Func::wrap(&store, logstr).into(),
     ])?;
     unsafe {
         MEM = Some(instance
