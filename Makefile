@@ -2,7 +2,7 @@ default:
 	wasm-pack build hello
 	cargo run
 clean:
-	pkill rust-analyzer ;cargo clean
+	-pkill rust-analyzer; pkill cargo ;rm -rf target hello/target hello/pkg Cargo.lock hello/Cargo.lock 
 
 
 # cd wasi; cargo wasi build --release

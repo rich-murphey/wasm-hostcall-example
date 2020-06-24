@@ -1,16 +1,13 @@
 use {
     rmp_serde,
-    serde::{
-        Deserialize,
-        Serialize
-    },
+    serde::Serialize,
     wasm_bindgen::prelude::*,
 };
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct AB {
     pub a: u32,
     pub b: String,
@@ -19,25 +16,33 @@ pub struct AB {
 // #[wasm_bindgen] does not support returning Result<i32,JsValue> from
 // extern fn.
 
-#[wasm_bindgen]
+#[no_mangle]
 extern "C" {
-    fn logint(s: i32) -> i32;
-    fn logstr(s: &str) -> i32;
-    fn logab_(s: &[u8]) -> i32;
+    fn logint_(s: i32);
+    fn logab_ (s: &[u8]);
+    fn logstr_(s: &[u8]);
 }
 
-fn logab(ab: &AB) -> i32 {
-    logab_(
-        &rmp_serde::to_vec(ab).unwrap()
-    )
+fn logint(s: i32) {
+     unsafe {
+        logint_(s)
+    }
+}
+fn logab(ab: &AB) {
+     unsafe {
+        logab_(&rmp_serde::to_vec(ab).unwrap())
+    }
+}
+fn logstr(s: &str) {
+    unsafe {
+        logstr_(s.as_bytes())
+    }
 }
 
 #[wasm_bindgen]
 pub fn hello() -> Result<i32,JsValue> {
-    let n = logint(1234);
-    let _ = logint(n);
-    let n = logstr("abcd");
-    let _ = logint(n);
-    let _ = logab(&AB{a: 1, b: "1234 asdf".to_string()});
+    logstr("abcd");
+    logint(1234);
+    logab(&AB{a: 1, b: "1234 asdf".to_string()});
     Ok(4567)
 }

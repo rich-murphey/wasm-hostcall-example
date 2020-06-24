@@ -19,43 +19,50 @@ use {
 
 static mut MEM: Option<Memory> = None;
 
-fn mem_str<'a>(offset: i32, length: i32) -> &'a str {
-    let bytes = unsafe {
-        &MEM.as_ref().unwrap()
-            .data_unchecked()[offset as usize..][..length as usize]
-    };
-    std::str::from_utf8(bytes).unwrap()
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AB {
     pub a: u32,
     pub b: String,
 }
 
-fn mem_struct<'a, T: Deserialize::<'a>>(offset: i32, length: i32) -> T {
-    let v: T = rmp_serde::from_slice(
-        unsafe {
-            &MEM.as_ref().unwrap()
-                .data_unchecked()[offset as usize..][..length as usize]
-        }
-    ).unwrap();
-    v
+
+fn slice_from<'a>(offset: i32, length: i32) -> &'a [u8] {
+    unsafe {
+        &MEM.as_ref().unwrap()
+            .data_unchecked()[offset as usize..][..length as usize]
+    }
 }
 
-pub fn logint(s: i32) -> i32 {
+fn str_from<'a>(offset: i32, length: i32) -> &'a str {
+    let slice = slice_from(offset, length);
+    std::str::from_utf8(slice).unwrap()
+}
+
+fn struct_from_rmps<'a, T: Deserialize::<'a>>(offset: i32, length: i32) -> T {
+    let slice = slice_from(offset, length);
+    rmp_serde::from_slice(slice).unwrap()
+}
+
+
+pub fn logint(s: i32) {
     println!("int: {}", s);
-    2345
 }
 
-pub fn logstr(offset: i32, length: i32) -> i32 {
-    println!("str: {}", mem_str(offset, length));
-    3456
+// (i64 vmctx, i64, i32) -> i32 system_v
+// (i64 vmctx, i64, i32, i32) -> i32 system_v
+// pub fn logstr(vmctx: i64, x: i64, offset: i32, length: i32) -> i32 {
+
+// pub fn logstr(a: f32, c: i64, x: i64, offset: i32, length: i32) -> i32 {
+//     println!("str: {}", str_from(offset, length));
+//     3456
+// }
+
+pub fn logstr(offset: i32, length: i32) {
+    println!("str: {}", str_from(offset, length));
 }
 
-pub fn logab(offset: i32, length: i32) -> i32 {
-    println!("struct: {:?}", mem_struct::<AB>(offset, length));
-    3456
+pub fn logab(offset: i32, length: i32) {
+    println!("struct: {:?}", struct_from_rmps::<AB>(offset, length));
 }
 
 fn main() -> Result<()> {
@@ -64,8 +71,8 @@ fn main() -> Result<()> {
     let module = Module::from_file(store.engine(), wasm_file)?;
     let instance = Instance::new(&store, &module, &[
         Func::wrap(&store, logint).into(),
-        Func::wrap(&store, logstr).into(),
         Func::wrap(&store, logab).into(),
+        Func::wrap(&store, logstr).into(),
     ])?;
     unsafe {
         MEM = Some(instance
