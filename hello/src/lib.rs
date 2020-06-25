@@ -10,37 +10,36 @@ use {
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct AB {
-    pub a: u32,
-    pub b: String,
-}
-
+#[wasm_bindgen]
 extern "C" {
-    // the bindings break when the order is changed.
+    // Note: the bindings may mis-map when the order is changed.
     fn log_str(offset: i32, len: i32);
     fn log_int(s: i32);
     fn log_ab(offset: i32, len: i32);
 }
 
+// log an integer
 fn logint(s: i32) {
-     unsafe {
-        log_int(s)
-    }
+    log_int(s)
 }
 
-fn logab(ab: &AB) {
-     unsafe {
-         let slice = &rmp_serde::to_vec(ab).unwrap();
-         log_ab(slice.as_ptr() as i32, slice.len() as i32);
-    }
-}
-
+// log a string
 fn logstr(s: &str) {
-    unsafe {
-        let slice = s.as_bytes();
-        log_str(slice.as_ptr() as i32, slice.len() as i32);
-    }
+    // convert the string to a slice
+    let slice = s.as_bytes();
+    // pass the offset and len of the slice
+    log_str(slice.as_ptr() as i32, slice.len() as i32);
+}
+
+// Both this application and the WebAssembly file include this struct definition.
+include!("../../src/model.rs");
+
+// log a struct
+fn logab(ab: &AB) {
+    // serialized struct to a slice
+    let slice = &rmp_serde::to_vec(ab).unwrap();
+    // pass the offset and len of the slice
+    log_ab(slice.as_ptr() as i32, slice.len() as i32);
 }
 
 #[wasm_bindgen]
