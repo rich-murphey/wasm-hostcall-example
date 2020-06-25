@@ -1,36 +1,51 @@
 ## Rust Hostcall Example
 
-This example shows a way to pass strings and structures from Rust wasm code
-to a Rust application that uses Wasmtime.
+This example shows how to export and import functions between a Rust
+application that loads WebAssembly, and Rust WebAssembly code.
 
-Three example functions in src/exports.rs are exported from the
-application to Wasm:
+Note: the raw interface between the host and wasm has certain
+limitations.  Arguments are limited to interger and floating point
+numbers. This example shows one way to adapt to these limitations.
+
+In order to pass a string, the offset and length are passed instead.
+To pass an arbitrary object, the offset and length of a serialized
+copy is passed instead.
+
+The host (application) exports the following fuctions to demonstrate passing
+intergers, strings and structs.
 ```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
 fn log_ab(ab: &AB)
-```
-Where AB is:
-```rust
+
 pub struct AB {
     pub a: u32,
     pub b: String,
 }
 ```
 
-They are exported from the Rust application in the
-[src/exports.rs](src/exports.rs) and imported into Wasm in [wasm/src/imports.rs](wasm/src/imports.rs).
+To demonstrate this, the Wasm module,
+[wasm/src/lib.rs](wasm/src/lib.rs), calls them:
+```rust
+pub fn hello() -> Result<i32,JsValue> {
+    log_str("Hello World!");
+    log_int(1234);
+    log_ab(&AB{a: 1234, b: "abcd".to_string()});
+    Ok(4567)
+}
+```
 
-The raw interface available between the host application and wasm is
-limited to numeric arguments.  To pass a string, the offset and length
-are passed instead.  To pass an arbitrary object, the offset and
-length of a serialized copy is passed instead.
+The three functions funcions are defined in [wasm/src/imports.rs](wasm/src/imports.rs):
+```rust
+pub fn log_str(s: &str) {
+    // convert the string to a slice
+    let slice = s.as_bytes();
+    // pass the offset and len of the slice
+    log_str_raw(slice.as_ptr() as i32, slice.len() as i32);
+}
+```
 
-In wasm/src/lib.rs the function hello() is exported. It calls each of
-the exported functions, to demonstrate all three calls.
-
-
-Here is a host application function that takes a string argument.
+They, in turn, call the raw host (application) interface defined in [src/exports.rs](src/exports.rs):
 ```rust
 // Given a rust &str at an offset and length in caller's wasm memory, log it to stdout.
 fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
@@ -47,12 +62,9 @@ fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 }
 ```
 
-Here is the wasm wrapper that calls the host application function.
-```rust
-pub fn log_str(s: &str) {
-    // convert the string to a slice
-    let slice = s.as_bytes();
-    // pass the offset and len of the slice
-    log_str_raw(slice.as_ptr() as i32, slice.len() as i32);
-}
-```
+See [exports.rs](src/exports.rs) and [imports.rs](wasm/src/imports.rs)
+for the corresponding code for `fn log_ab(ab: &AB)`.
+
+Suggestions and comments are welcome. Plees feel to open an issue if
+you can suggest better ways of writing these, or find parts that are
+unclear.
