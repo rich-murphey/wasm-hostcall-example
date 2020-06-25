@@ -1,6 +1,3 @@
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
 ## Contents
 * [About This Project](#about-this-project)
 * [Getting Started](#getting-started)
