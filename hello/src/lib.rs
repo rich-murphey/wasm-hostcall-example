@@ -1,47 +1,52 @@
 use {
     rmp_serde,
-    serde::Serialize,
+    serde::{
+        Deserialize,
+        Serialize
+    },
     wasm_bindgen::prelude::*,
 };
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AB {
     pub a: u32,
     pub b: String,
 }
 
-extern {
-    // the bindings break if you change the order.
-    #[allow(improper_ctypes)]
-    fn logstr_(a: &[u8]);
-    fn logint_(s: i32);
-    #[allow(improper_ctypes)]
-    fn logab_ (s: &[u8]);
+extern "C" {
+    // the bindings break when the order is changed.
+    fn log_str(offset: i32, len: i32);
+    fn log_int(s: i32);
+    fn log_ab(offset: i32, len: i32);
 }
 
 fn logint(s: i32) {
      unsafe {
-        logint_(s)
+        log_int(s)
     }
 }
+
 fn logab(ab: &AB) {
      unsafe {
-        logab_(&rmp_serde::to_vec(ab).unwrap())
+         let slice = &rmp_serde::to_vec(ab).unwrap();
+         log_ab(slice.as_ptr() as i32, slice.len() as i32);
     }
 }
+
 fn logstr(s: &str) {
     unsafe {
-        logstr_(s.as_bytes())
+        let slice = s.as_bytes();
+        log_str(slice.as_ptr() as i32, slice.len() as i32);
     }
 }
 
 #[wasm_bindgen]
 pub fn hello() -> Result<i32,JsValue> {
-    logstr("abcd");
+    logstr("abcd 1234");
     logint(1234);
-    logab(&AB{a: 1, b: "1234 asdf".to_string()});
+    logab(&AB{a: 1, b: "1234".to_string()});
     Ok(4567)
 }
