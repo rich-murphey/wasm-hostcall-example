@@ -1,9 +1,19 @@
-## Rust Hostcall Example
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-This example shows how to export and import functions between a Rust
-application that loads WebAssembly, and Rust WebAssembly code.
+## Contents
+* [About This Project](#about-this-project)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Building](#building)
+* [Code Exerpts](#code-exerpts)
+      
+## About This Project
 
-Note: Wasmtime is still quite new and evolving, esp. new features to
+This is an example of how to export and import functions between a Rust
+application that loads WebAssembly, and Rust WebAssembly it loads.
+
+Wasmtime is quite new and evolving, especially new features to
 import/export functions between wasm and host.  This demo is intended
 to show some ways to work with interim limitations on argument types.
 
@@ -12,6 +22,38 @@ arguments are limited to interger and floating point numbers. So, in
 order to pass a string, the offset and length are passed instead.  To
 pass an arbitrary object, the offset and length of a serialized copy
 is passed instead.
+
+Suggestions and comments are welcome. Plees feel to open an issue if
+you can suggest better ways of writing these, or find parts that are
+unclear.
+
+## Getting Started
+
+Here's how to build this example.
+
+### Prerequisites
+
+[Install rust](https://www.rust-lang.org/tools/install), then add features:
+
+```sh
+rustup target add wasm32-wasi
+cargo install wasm-pack
+```
+
+### Building
+After the above, clone this project:
+```sh
+git clone https://github.com/rich-murphey/wasm-hostcall-example.git
+```
+Then build the wasm module:
+```sh
+wasm-pack build wasm
+```
+Then build and run the application:
+```
+cargo run
+```
+## Code Exerpts
 
 The host (application) exports the following fuctions to demonstrate passing
 intergers, strings and structs.
@@ -67,6 +109,8 @@ fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 See [exports.rs](src/exports.rs) and [imports.rs](wasm/src/imports.rs)
 for the corresponding code for `fn log_ab(ab: &AB)`.
 
-Suggestions and comments are welcome. Plees feel to open an issue if
-you can suggest better ways of writing these, or find parts that are
-unclear.
+## Acknowledgements
+* [The Bytecode Alliance](https://bytecodealliance.org/)
+* [Wasmtime](hhttps://github.com/bytecodealliance/wasmtime)
+* [Cargo Wasi](https://github.com/bytecodealliance/cargo-wasi)
+* [WebAssembly System Interface](https://github.com/bytecodealliance/wasi)
