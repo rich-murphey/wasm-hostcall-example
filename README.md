@@ -107,7 +107,7 @@ See [exports.rs](src/exports.rs) and [imports.rs](wasm/src/imports.rs)
 for the corresponding code for `fn log_ab(ab: &AB)`.
 
 ## Acknowledgements
-* [The Bytecode Alliance](https://bytecodealliance.org/)
-* [Wasmtime](hhttps://github.com/bytecodealliance/wasmtime)
+* [The Bytecode Alliance](https://bytecodealliance.org)
+* [Wasmtime](https://github.com/bytecodealliance/wasmtime)
 * [Cargo Wasi](https://github.com/bytecodealliance/cargo-wasi)
 * [WebAssembly System Interface](https://github.com/bytecodealliance/wasi)
