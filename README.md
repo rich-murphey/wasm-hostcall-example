@@ -5,13 +5,13 @@ to a Rust application that uses Wasmtime.
 
 Three example functions in src/exports.rs are exported from the
 application to Wasm:
-```
+```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
 fn log_ab(ab: &AB)
 ```
 Where AB is:
-```
+```rust
 pub struct AB {
     pub a: u32,
     pub b: String,
@@ -31,7 +31,7 @@ the exported functions, to demonstrate all three calls.
 
 
 Here is a host application function that takes a string argument.
-```
+```rust
 // Given a rust &str at an offset and length in caller's wasm memory, log it to stdout.
 fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
     // get the caller's wasm memory
@@ -48,7 +48,7 @@ fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 ```
 
 Here is the wasm wrapper that calls the host application function.
-```
+```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice
     let slice = s.as_bytes();
