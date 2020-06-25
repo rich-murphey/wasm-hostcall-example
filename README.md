@@ -3,7 +3,7 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Building](#building)
-* [Code Exerpts](#code-exerpts)
+* [Code Excerpts](#code-excerpts)
       
 ## About This Project
 
@@ -11,16 +11,16 @@ This is an example of how to export and import functions between a Rust
 application that loads WebAssembly, and Rust WebAssembly it loads.
 
 Wasmtime is quite new and evolving, especially new features to
-import/export functions between wasm and host.  This demo is intended
+import/export functions between Wasm and host.  This demo is intended
 to show some ways to work with interim limitations on argument types.
 
 Currently, in the raw interface between the host and WebAssembly,
-arguments are limited to interger and floating point numbers. So, in
+arguments are limited to integer and floating point numbers. So, in
 order to pass a string, the offset and length are passed instead.  To
 pass an arbitrary object, the offset and length of a serialized copy
 is passed instead.
 
-Suggestions and comments are welcome. Plees feel to open an issue if
+Suggestions and comments are welcome. Please feel to open an issue if
 you can suggest better ways of writing these, or find parts that are
 unclear.
 
@@ -42,7 +42,7 @@ After the above, clone this project:
 ```sh
 git clone https://github.com/rich-murphey/wasm-hostcall-example.git
 ```
-Then build the wasm module:
+Then build the Wasm module:
 ```sh
 wasm-pack build wasm
 ```
@@ -50,10 +50,10 @@ Then build and run the application:
 ```
 cargo run
 ```
-## Code Exerpts
+## Code Excerpts
 
-The host (application) exports the following fuctions to demonstrate passing
-intergers, strings and structs.
+The host (application) exports the following functions to demonstrate passing
+integers, strings and structs.
 ```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
@@ -76,7 +76,8 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The three functions funcions are defined in [wasm/src/imports.rs](wasm/src/imports.rs):
+The three functions are defined in
+[wasm/src/imports.rs](wasm/src/imports.rs), such as:
 ```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice
@@ -88,9 +89,9 @@ pub fn log_str(s: &str) {
 
 They, in turn, call the raw host (application) interface defined in [src/exports.rs](src/exports.rs):
 ```rust
-// Given a rust &str at an offset and length in caller's wasm memory, log it to stdout.
+// Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
 fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
-    // get the caller's wasm memory
+    // get the caller's Wasm memory
     let mem :Memory = mem_from(&caller)?;
     // get a slice at the given offset and length
     let slice :&[u8] = slice_from(&mem, offset, length)?;
@@ -106,7 +107,7 @@ fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 See [exports.rs](src/exports.rs) and [imports.rs](wasm/src/imports.rs)
 for the corresponding code for `fn log_ab(ab: &AB)`.
 
-## Acknowledgements
+## Acknowledgments
 * [The Bytecode Alliance](https://bytecodealliance.org)
 * [Wasmtime](https://github.com/bytecodealliance/wasmtime)
 * [Cargo Wasi](https://github.com/bytecodealliance/cargo-wasi)
