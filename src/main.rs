@@ -16,10 +16,10 @@ use {
 };
 
 fn main() -> anyhow::Result<()> {
-    // load the WebAssembly file, hello/pkg/hello_bg.wasm, and attach
+    // load the WebAssembly file, wasm/pkg/hello_bg.wasm, and attach
     // it to a store containing the wasm memory, etc.
     let store = wasmtime::Store::default();
-    let wasm_file = "hello/pkg/hello_bg.wasm";
+    let wasm_file = "wasm/pkg/hello_bg.wasm";
     let module = wasmtime::Module::from_file(store.engine(), wasm_file)
         .context(wasm_file)?;
 
