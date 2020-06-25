@@ -3,13 +3,15 @@
 This example shows how to export and import functions between a Rust
 application that loads WebAssembly, and Rust WebAssembly code.
 
-Note: the raw interface between the host and wasm has certain
-limitations.  Arguments are limited to interger and floating point
-numbers. This example shows one way to adapt to these limitations.
+Note: Wasmtime is still quite new and evolving, esp. new features to
+import/export functions between wasm and host.  This demo is intended
+to show some ways to work with interim limitations on argument types.
 
-In order to pass a string, the offset and length are passed instead.
-To pass an arbitrary object, the offset and length of a serialized
-copy is passed instead.
+Currently, in the raw interface between the host and WebAssembly,
+arguments are limited to interger and floating point numbers. So, in
+order to pass a string, the offset and length are passed instead.  To
+pass an arbitrary object, the offset and length of a serialized copy
+is passed instead.
 
 The host (application) exports the following fuctions to demonstrate passing
 intergers, strings and structs.
