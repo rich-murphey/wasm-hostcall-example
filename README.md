@@ -62,10 +62,10 @@ passing arguments that are:
 
 Here is the interface in Wasm Rust code:
 ```rust
-fn log_int(s: i32)
-fn log_str(s: &str)
-fn log_ab(ab: &AB) // serialized
-fn log_cd(cd: &CD) // zero copy
+fn log_int(s: i32);
+fn log_str(s: &str);
+fn log_ab(ab: &AB); // serialized
+fn log_cd(cd: &CD); // zero copy
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AB {
