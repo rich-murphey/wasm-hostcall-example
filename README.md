@@ -56,13 +56,13 @@ The host (application) exports the following functions to demonstrate
 passing arguments that are:
 * integers
 * strings
-* arbitrary structs, and
+* serializable structs, and
 * zero-copy fixed-sized structs.
 ```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
-fn log_ab(ab: &AB)
-fn log_cd(ab: &CD)
+fn log_ab(ab: &AB) // serialized
+fn log_cd(ab: &CD) // zero copy
 
 pub struct AB {
     pub a: u32,
