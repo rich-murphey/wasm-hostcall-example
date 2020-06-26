@@ -52,8 +52,12 @@ cargo run
 ```
 ## Code Excerpts
 
-The host (application) exports the following functions to demonstrate passing
-integers, strings, arbitrary structs, and zero-copy of fixed-sized structs.
+The host (application) exports the following functions to demonstrate
+passing arguments that are:
+* integers
+* strings
+* arbitrary structs, and
+* zero-copy fixed-sized structs.
 ```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
