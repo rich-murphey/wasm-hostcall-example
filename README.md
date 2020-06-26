@@ -8,18 +8,24 @@
 ## About This Project
 
 This is an example of how to export and import functions between a Rust
-application that loads WebAssembly, and Rust WebAssembly it loads.
+application that loads [WebAssembly][WebAssembly], and Rust WebAssembly it loads.
 
+This Rust appliction uses [Wasmtime][Wasmtime] to load and run WebAssembly.
 Wasmtime is quite new and evolving, especially new features to
 import/export functions between Wasm and host.  This demo is intended
 to show some ways to work with interim limitations on argument types.
 
-Currently, in the raw interface between the host and WebAssembly,
-arguments are limited to integer and floating point numbers. So, in
-order to pass a string, the offset and length are passed instead.  To
-pass an arbitrary object, the offset and length of a serialized copy
-is passed instead. To pass a fixed size struct that contains no
-pointers (i.e. implements Copy), the offset and size is passed instead. 
+One of the limitations is on the arguments to function calls between
+between the host and WebAssembly.  In low-level assembly, arguments
+are limited to integer and floating point numbers. In high-level
+languages such as Rust, the intergers can represent pointers to data
+types in memory. That is the focus of these examples.
+
+In order to pass a string, the offset and length are passed instead.
+To pass an arbitrary object, the offset and length of a serialized
+copy is passed instead. To pass a fixed size struct that contains no
+pointers (i.e. implements Copy), the offset and size is passed
+instead.
 
 Suggestions and comments are welcome. Please feel to open an issue if
 you can suggest better ways of writing these, or find parts that are
@@ -127,3 +133,5 @@ for the corresponding code for `fn log_ab(ab: &AB)`, etc.
 * [Wasmtime](https://github.com/bytecodealliance/wasmtime)
 * [Cargo Wasi](https://github.com/bytecodealliance/cargo-wasi)
 * [WebAssembly System Interface](https://github.com/bytecodealliance/wasi)
+
+[WebAssembly](https://webassembly.org)
