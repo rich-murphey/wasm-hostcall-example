@@ -12,6 +12,7 @@ use {
         Deserialize,
         Serialize,
     },
+    wasm_bindgen::prelude::*,
     arrayvec::ArrayString,
 };
 
@@ -26,6 +27,13 @@ fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Tr
         None => Err(Trap::new("pointer/length out of bounds")),
     }
 }
+
+fn struct_from<T>(mem: &Memory, offset: i32) -> &T {
+    unsafe { std::mem::transmute::<&u8, &T>(
+        &mem.data_unchecked()[offset as usize]
+    )}
+}
+
 
 // Get the Memory object from the wasm caller.
 fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
@@ -94,6 +102,20 @@ where T: Sized + Copy + Debug
     Ok(())
 }
 
+fn log_js(caller: Caller<'_>, offset: i32) -> Result<(), Trap>
+{
+
+    // get the caller's wasm memory
+    let mem :Memory = mem_from(&caller)?;
+    // // get a slice at the given offset and length
+    // // get a slice at the given offset and length
+    // let slice :&[u8] = slice_from(&mem, offset, length)?;
+    // // deserialize a struct from the slice
+    let jsval :&JsValue = struct_from::<JsValue>(&mem, offset);
+    println!("struct: {:?}", jsval);
+    Ok(())
+}
+
 pub fn get_funcs(store: &Store) -> Vec<wasmtime::Extern> {
     vec![
         // Note: the bindings may mis-map when the order is changed.
@@ -101,5 +123,6 @@ pub fn get_funcs(store: &Store) -> Vec<wasmtime::Extern> {
         Func::wrap(store, log_str).into(),
         Func::wrap(store, log_ab).into(),
         Func::wrap(store, log_struct::<CD>).into(),
+        Func::wrap(store, log_js).into(),
     ]
 }

@@ -11,12 +11,13 @@ use {
 };
 
 #[wasm_bindgen]
-extern "C" {
+extern {
     // Note: the bindings may mis-map when the order is changed.
     fn log_int_raw(s: i32);
     fn log_str_raw(s: &[u8]);
     fn log_ab_raw(s: &[u8]);
     fn log_cd_raw(s: &[u8]);
+    fn log_js_raw(s: i32);
 }
 
 // log an integer
@@ -62,4 +63,9 @@ where T: Sized + Copy + Debug,
 
 pub fn log_cd(cd: &CD) {
     log_struct(cd, log_cd_raw);
+}
+
+pub fn log_js(val: &JsValue) {
+    let ptr = unsafe { std::mem::transmute::<&JsValue, i32>(val) };
+    log_js_raw(ptr as i32);
 }

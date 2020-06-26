@@ -13,5 +13,6 @@ pub fn hello() -> Result<i32,JsValue> {
     log_int(1234);
     log_ab(&AB{a: 1234, b: "abcd".to_string()});
     log_cd(&CD::from(1234, "hello world"));
+    log_js(&JsValue::from(2345));
     Ok(4567)
 }
