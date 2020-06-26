@@ -50,7 +50,7 @@ After the above, clone this project:
 git clone https://github.com/rich-murphey/wasm-hostcall-example.git
 cd wasm-hostcall-example
 ```
-Then build the WebAssembly (Wasm) module:
+Then build the WebAssembly module:
 ```sh
 wasm-pack build wasm
 ```
@@ -87,7 +87,7 @@ pub struct CD {
 }
 ```
 
-The Wasm function hello() in [wasm/src/lib.rs](wasm/src/lib.rs) calls the above functions.
+The WebAssembly (Wasm) function hello() in [wasm/src/lib.rs](wasm/src/lib.rs) calls the above functions.
 ```rust
 pub fn hello() -> Result<i32,JsValue> {
     log_str("Hello World!");
