@@ -8,9 +8,9 @@
 ## About This Project
 
 This is an example of how to export and import functions between a Rust
-application that loads [WebAssembly][WebAssembly], and Rust WebAssembly it loads.
+application that loads [WebAssembly][webassembly], and Rust WebAssembly it loads.
 
-This Rust appliction uses [Wasmtime][Wasmtime] to load and run WebAssembly.
+This Rust appliction uses [Wasmtime][wasmtime] to load and run WebAssembly.
 Wasmtime is quite new and evolving, especially new features to
 import/export functions between Wasm and host.  This demo is intended
 to show some ways to work with interim limitations on argument types.
@@ -24,8 +24,8 @@ types in memory. That is the focus of these examples.
 In order to pass a string, the offset and length are passed instead.
 To pass an arbitrary object, the offset and length of a serialized
 copy is passed instead. To pass a fixed size struct that contains no
-pointers (i.e. implements Copy), the offset and size is passed
-instead.
+pointers (i.e. implements the Copy trait), the offset and size is
+passed instead.
 
 Suggestions and comments are welcome. Please feel to open an issue if
 you can suggest better ways of writing these, or find parts that are
@@ -134,4 +134,5 @@ for the corresponding code for `fn log_ab(ab: &AB)`, etc.
 * [Cargo Wasi](https://github.com/bytecodealliance/cargo-wasi)
 * [WebAssembly System Interface](https://github.com/bytecodealliance/wasi)
 
-[WebAssembly](https://webassembly.org)
+[webassembly]: https://webassembly.org
+[wasmtime]: https://github.com/bytecodealliance/wasmtime
