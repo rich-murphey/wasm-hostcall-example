@@ -98,7 +98,7 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The Wasm side of the API is defined in [wasm/src/imports.rs](wasm/src/imports.rs).dd
+The Wasm side of the API is defined in [wasm/src/imports.rs](wasm/src/imports.rs).
 ```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice (&[u8]}, and pass it to the host.
@@ -125,7 +125,7 @@ fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 ```
 
 See [exports.rs](src/exports.rs) and [imports.rs](wasm/src/imports.rs)
-for the corresponding code for `fn log_ab(ab: &AB)`, etc.
+for the corresponding code for the other functions in the API.
 
 ## Acknowledgments
 * [The Bytecode Alliance](https://bytecodealliance.org)
