@@ -120,7 +120,7 @@ fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 ```
 
 See [exports.rs](src/exports.rs) and [imports.rs](wasm/src/imports.rs)
-for the corresponding code for `fn log_ab(ab: &AB)`.
+for the corresponding code for `fn log_ab(ab: &AB)`, etc.
 
 ## Acknowledgments
 * [The Bytecode Alliance](https://bytecodealliance.org)
