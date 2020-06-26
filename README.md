@@ -11,15 +11,15 @@ This demo shows how to export and import functions between a Rust
 application that loads [WebAssembly][webassembly] (Wasm), and Rust
 WebAssembly it loads.
 
-This Rust appliction uses [Wasmtime][wasmtime] to load and run WebAssembly.
+This Rust application uses [Wasmtime][wasmtime] to load and run WebAssembly.
 Wasmtime is quite new and evolving, especially new features to
 import/export functions between Wasm and host.  This demo is intended
 to show some ways to work with interim limitations on argument types.
 
 One of the limitations is on the arguments to function calls between
-between the host and WebAssembly.  In low-level assembly, arguments
+the host and WebAssembly.  In low-level assembly, arguments
 are limited to integer and floating point numbers. In high-level
-languages such as Rust, the intergers can represent pointers to data
+languages such as Rust, the integers can represent pointers to data
 types in memory. That is the focus of these examples.
 
 In order to pass a string, the offset and length are passed instead.
@@ -65,7 +65,7 @@ The host (application) exports the following functions to demonstrate
 passing arguments that are:
 * integers
 * strings
-* serializable structs, and
+* serialized structs, and
 * zero-copy fixed-sized structs.
 
 Here is the interface in Wasm Rust code:
@@ -103,7 +103,7 @@ The Wasm side of the API is defined in [wasm/src/imports.rs](wasm/src/imports.rs
 ```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice (&[u8]}, and pass it to the host.
-    // Note: When Wasm passes &[u8], the host recieves offset: i32, length: i32.
+    // Note: When Wasm passes &[u8], the host receives offset: i32, length: i32.
     log_str_raw(s.as_bytes());
 }
 ```
