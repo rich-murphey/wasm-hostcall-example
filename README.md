@@ -65,11 +65,13 @@ fn log_str(s: &str)
 fn log_ab(ab: &AB) // serialized
 fn log_cd(ab: &CD) // zero copy
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AB {
     pub a: u32,
     pub b: String,
 }
 
+#[derive(Debug, Copy, Clone)]
 pub struct CD {
     pub c: i32,
     pub d: ArrayString::<[u8; CD_N]>,
@@ -92,10 +94,8 @@ The functions are defined in
 [wasm/src/imports.rs](wasm/src/imports.rs), such as:
 ```rust
 pub fn log_str(s: &str) {
-    // convert the string to a slice
-    let slice = s.as_bytes();
-    // pass the offset and len of the slice
-    log_str_raw(slice.as_ptr() as i32, slice.len() as i32);
+    // convert the string to a slice (&[u8]}, and pass it to the host
+    log_str_raw(s.as_bytes());
 }
 ```
 

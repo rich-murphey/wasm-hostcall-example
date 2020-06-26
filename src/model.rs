@@ -7,7 +7,6 @@ pub struct AB {
 const CD_N :usize = 32;
 
 #[derive(Debug, Copy, Clone)]
-#[repr(C)]
 pub struct CD {
     pub c: i32,
     pub d: ArrayString::<[u8; CD_N]>,
