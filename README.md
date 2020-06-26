@@ -88,7 +88,7 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The three functions are defined in
+The functions are defined in
 [wasm/src/imports.rs](wasm/src/imports.rs), such as:
 ```rust
 pub fn log_str(s: &str) {
@@ -99,7 +99,7 @@ pub fn log_str(s: &str) {
 }
 ```
 
-They, in turn, call the raw host (application) interface defined in [src/exports.rs](src/exports.rs):
+They call the raw host (application) interface defined in [src/exports.rs](src/exports.rs):
 ```rust
 // Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
 fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
