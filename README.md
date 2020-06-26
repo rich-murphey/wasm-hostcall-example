@@ -18,7 +18,8 @@ Currently, in the raw interface between the host and WebAssembly,
 arguments are limited to integer and floating point numbers. So, in
 order to pass a string, the offset and length are passed instead.  To
 pass an arbitrary object, the offset and length of a serialized copy
-is passed instead.
+is passed instead. To pass a fixed size struct that contains no
+pointers (i.e. implements Copy), the offset and size is passed instead. 
 
 Suggestions and comments are welcome. Please feel to open an issue if
 you can suggest better ways of writing these, or find parts that are
