@@ -8,7 +8,7 @@
 ## About This Project
 
 This is an example of how to export and import functions between a Rust
-application that loads [WebAssembly][webassembly], and Rust WebAssembly it loads.
+application that loads [WebAssembly][webassembly] (Wasm), and Rust WebAssembly it loads.
 
 This Rust appliction uses [Wasmtime][wasmtime] to load and run WebAssembly.
 Wasmtime is quite new and evolving, especially new features to
@@ -50,7 +50,7 @@ After the above, clone this project:
 git clone https://github.com/rich-murphey/wasm-hostcall-example.git
 cd wasm-hostcall-example
 ```
-Then build the Wasm module:
+Then build the WebAssembly (Wasm) module:
 ```sh
 wasm-pack build wasm
 ```
@@ -88,7 +88,6 @@ pub struct CD {
 ```
 
 The Wasm function hello() in [wasm/src/lib.rs](wasm/src/lib.rs) calls the above functions.
-, calls them:
 ```rust
 pub fn hello() -> Result<i32,JsValue> {
     log_str("Hello World!");
@@ -99,8 +98,7 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The functions are defined in
-[wasm/src/imports.rs](wasm/src/imports.rs) in the Wasm side of the API:
+The Wasm side of the API is defined in [wasm/src/imports.rs](wasm/src/imports.rs).dd
 ```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice (&[u8]}, and pass it to the host.
