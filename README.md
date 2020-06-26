@@ -53,15 +53,21 @@ cargo run
 ## Code Excerpts
 
 The host (application) exports the following functions to demonstrate passing
-integers, strings and structs.
+integers, strings, arbitrary structs, and zero-copy of fixed-sized structs.
 ```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
 fn log_ab(ab: &AB)
+fn log_cd(ab: &CD)
 
 pub struct AB {
     pub a: u32,
     pub b: String,
+}
+
+pub struct CD {
+    pub c: i32,
+    pub d: ArrayString::<[u8; CD_N]>,
 }
 ```
 
@@ -72,6 +78,7 @@ pub fn hello() -> Result<i32,JsValue> {
     log_str("Hello World!");
     log_int(1234);
     log_ab(&AB{a: 1234, b: "abcd".to_string()});
+    log_cd(&CD::from(1234, "hello world"));
     Ok(4567)
 }
 ```

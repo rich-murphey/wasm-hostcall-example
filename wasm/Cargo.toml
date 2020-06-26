@@ -3,18 +3,13 @@ name = "hello"
 version = "0.1.0"
 authors = ["rich-murphey <rich@murphey.org>"]
 edition = "2018"
-# description = "wasm test"
-# repository = "none"
-# license = "none"
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-# bincode = "1.2.1"
+arrayvec = "0.5.1"
 rmp-serde = "0.14.3"
-# rmpv = { version = "0.4.4", features = ["with-serde"] }
 serde = { version = "1.0.114", features = ["derive"] }
-# wasm-bindgen = "0.2.37"
 wasm-bindgen = "0.2.63"
 wee_alloc = "0.4.5"

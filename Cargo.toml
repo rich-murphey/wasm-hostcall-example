@@ -1,25 +1,14 @@
-#
-# compiler flags are in ./.cargo/config
 [package]
-authors = ["White Oak Labs, Inc <info@whiteoaklabs.com>"]
-name = "wasmtest"
-version = "0.1.15"
+authors = ["rich-murphey <rich@murphey.org>"]
+name = "wasm-hostcall-example"
+version = "0.1.0"
 edition = "2018"
-
-[profile.release]
-# lto = true
-
-# [profile.dev]
-# opt-level = 0
-# debug = true
 
 [dependencies]
 anyhow = "1.0.31"
-# bincode = "1.2.1"
+arrayvec = "0.5.1"
 rmp-serde = "0.14.3"
-rmpv = { version = "0.4.4", features = ["with-serde"] }
 serde = { version = "1.0.114", features = ["derive"] }
 wasm-bindgen = "0.2.63"
-# wasm-bindgen = "0.2.63"
 wasmtime = "0.18.0"
 wasmtime-wasi = "0.18.0"

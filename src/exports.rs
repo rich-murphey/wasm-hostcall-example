@@ -1,4 +1,6 @@
 use {
+    std::marker::Sized,
+    std::fmt::Debug,
     wasmtime::{
         Caller,
         Func,
@@ -8,8 +10,9 @@ use {
     },
     serde::{
         Deserialize,
-        Serialize
+        Serialize,
     },
+    arrayvec::ArrayString,
 };
 
 // Given an offset and length in the caller's wasm memory, return a slice.
@@ -23,6 +26,7 @@ fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Tr
         None => Err(Trap::new("pointer/length out of bounds")),
     }
 }
+
 // Get the Memory object from the wasm caller.
 fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
     match caller.get_export("memory") {
@@ -68,11 +72,34 @@ fn log_ab(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
     Ok(())
 }
 
+// Given a struct that implments 'Copy' at an offset and
+// length in caller's wasm memory, log it to stdout.
+fn log_struct<T>(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
+where T: Sized + Copy + Debug
+{
+
+    // get the caller's wasm memory
+    let mem :Memory = mem_from(&caller)?;
+    // get a slice at the given offset and length
+    // get a slice at the given offset and length
+    let slice :&[u8] = slice_from(&mem, offset, length)?;
+    // deserialize a struct from the slice
+    let t :&T = {
+        if slice.len() != std::mem::size_of::<T>() {
+            return Err(Trap::new("invalid struct T size"));
+        }
+        unsafe { std::mem::transmute::<*const u8, &T>(slice.as_ptr()) }
+    };
+    println!("struct: {:?}", t);
+    Ok(())
+}
+
 pub fn get_funcs(store: &Store) -> Vec<wasmtime::Extern> {
     vec![
         // Note: the bindings may mis-map when the order is changed.
         Func::wrap(store, log_int).into(),
         Func::wrap(store, log_str).into(),
         Func::wrap(store, log_ab).into(),
+        Func::wrap(store, log_struct::<CD>).into(),
     ]
 }
