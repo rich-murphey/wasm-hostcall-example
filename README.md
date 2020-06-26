@@ -59,11 +59,13 @@ passing arguments that are:
 * strings
 * serializable structs, and
 * zero-copy fixed-sized structs.
+
+Here is the interface in Wasm Rust code:
 ```rust
 fn log_int(s: i32)
 fn log_str(s: &str)
 fn log_ab(ab: &AB) // serialized
-fn log_cd(ab: &CD) // zero copy
+fn log_cd(cd: &CD) // zero copy
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AB {
@@ -78,7 +80,7 @@ pub struct CD {
 }
 ```
 
-To demonstrate this, the Wasm module,
+The Wasm function hello() calls the above functions, to demonstrate.
 [wasm/src/lib.rs](wasm/src/lib.rs), calls them:
 ```rust
 pub fn hello() -> Result<i32,JsValue> {
@@ -90,7 +92,7 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The functions are defined in
+The Wasm side of the API are defined in
 [wasm/src/imports.rs](wasm/src/imports.rs), such as:
 ```rust
 pub fn log_str(s: &str) {
@@ -100,7 +102,7 @@ pub fn log_str(s: &str) {
 }
 ```
 
-They call the raw host (application) interface defined in [src/exports.rs](src/exports.rs):
+The host (application) side of the API are defined in [src/exports.rs](src/exports.rs):
 ```rust
 // Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
 fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
