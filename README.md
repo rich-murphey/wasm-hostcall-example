@@ -48,6 +48,7 @@ cargo install wasm-pack
 After the above, clone this project:
 ```sh
 git clone https://github.com/rich-murphey/wasm-hostcall-example.git
+cd wasm-hostcall-example
 ```
 Then build the Wasm module:
 ```sh
