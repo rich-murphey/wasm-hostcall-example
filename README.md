@@ -55,7 +55,7 @@ Then build the Wasm module:
 wasm-pack build wasm
 ```
 Then build and run the application:
-```
+```sh
 cargo run
 ```
 ## Code Excerpts
@@ -87,8 +87,8 @@ pub struct CD {
 }
 ```
 
-The Wasm function hello() calls the above functions, to demonstrate.
-[wasm/src/lib.rs](wasm/src/lib.rs), calls them:
+The Wasm function hello() in [wasm/src/lib.rs](wasm/src/lib.rs) calls the above functions.
+, calls them:
 ```rust
 pub fn hello() -> Result<i32,JsValue> {
     log_str("Hello World!");
@@ -99,8 +99,8 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The Wasm side of the API are defined in
-[wasm/src/imports.rs](wasm/src/imports.rs), such as:
+The functions are defined in
+[wasm/src/imports.rs](wasm/src/imports.rs) in the Wasm side of the API:
 ```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice (&[u8]}, and pass it to the host.
@@ -109,7 +109,7 @@ pub fn log_str(s: &str) {
 }
 ```
 
-The host (application) side of the API are defined in [src/exports.rs](src/exports.rs):
+The host (application) side of the API is defined in [src/exports.rs](src/exports.rs):
 ```rust
 // Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
 fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
