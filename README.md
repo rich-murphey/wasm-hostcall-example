@@ -7,8 +7,9 @@
       
 ## About This Project
 
-This is an example of how to export and import functions between a Rust
-application that loads [WebAssembly][webassembly] (Wasm), and Rust WebAssembly it loads.
+This demo shows how to export and import functions between a Rust
+application that loads [WebAssembly][webassembly] (Wasm), and Rust
+WebAssembly it loads.
 
 This Rust appliction uses [Wasmtime][wasmtime] to load and run WebAssembly.
 Wasmtime is quite new and evolving, especially new features to
