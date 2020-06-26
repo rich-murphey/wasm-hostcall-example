@@ -95,6 +95,7 @@ The functions are defined in
 ```rust
 pub fn log_str(s: &str) {
     // convert the string to a slice (&[u8]}, and pass it to the host
+    // Note: When Wasm passes &[u8], the host recieves offset: i32, length: i32.
     log_str_raw(s.as_bytes());
 }
 ```
