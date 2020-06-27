@@ -16,6 +16,10 @@ use {
     arrayvec::ArrayString,
 };
 
+
+// for additional details about these conventions, see:
+// https://github.com/bytecodealliance/wasmtime/blob/main/crates/wasmtime/src/func.rs
+
 // Get the Memory object from the wasm caller.
 fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
     match caller.get_export("memory") {
@@ -26,11 +30,15 @@ fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
 
 // get a slice at offset and length in the caller's wasm memory.
 fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Trap> {
-    // get caller's whole wasm memory as a slice
-    unsafe { mem.data_unchecked() }
+    match
+        // get caller's whole wasm memory as a slice
+        unsafe { mem.data_unchecked() }
         // get a sub-slice
         .get(offset as u32 as usize..(offset + length) as u32 as usize)
-        .ok_or_else(||Trap::new("pointer or length out of range"))
+    {
+        Some(x) => Ok(x),
+        _ => Err(Trap::new("pointer or length out of range"))
+    }
 }
 
 // transmute a slice of caller's wasm memory to a struct reference.
