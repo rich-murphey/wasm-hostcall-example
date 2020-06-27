@@ -24,11 +24,12 @@ fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
     }
 }
 
-
 // get a slice at offset and length in the caller's wasm memory.
 fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Trap> {
-    unsafe { mem.data_unchecked() }    // get caller's wasm memory as a slice
-        .get(offset as u32 as usize..(offset + length) as u32 as usize) // get sub-slice
+    // get caller's whole wasm memory as a slice
+    unsafe { mem.data_unchecked() }
+        // get a sub-slice
+        .get(offset as u32 as usize..(offset + length) as u32 as usize)
         .ok_or_else(||Trap::new("pointer or length out of range"))
 }
 
