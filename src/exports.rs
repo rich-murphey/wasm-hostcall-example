@@ -29,7 +29,7 @@ fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
 fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Trap> {
     unsafe { mem.data_unchecked() }    // get caller's wasm memory as a slice
         .get(offset as u32 as usize..(offset + length) as u32 as usize) // get sub-slice
-        .ok_or(Trap::new("pointer or length out of range"))
+        .ok_or_else(||Trap::new("pointer or length out of range"))
 }
 
 // transmute a slice of caller's wasm memory to a struct reference.
