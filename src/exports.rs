@@ -1,6 +1,7 @@
 use {
     std::marker::Sized,
     std::fmt::Debug,
+    std::mem::transmute,
     wasmtime::{
         Caller,
         Func,
@@ -15,32 +16,35 @@ use {
     arrayvec::ArrayString,
 };
 
-// Given an offset and length in the caller's wasm memory, return a slice.
-fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Trap> {
-    match unsafe {
-        mem.data_unchecked()    // get a slice of the wams memory
-            .get(offset as u32 as usize..) // starting at offset
-            .and_then(|arr| arr.get(..length as u32 as usize)) // with given length
-    } {
-        Some(data) => Ok(data),
-        None => Err(Trap::new("pointer/length out of bounds")),
-    }
-}
-
-#[allow(dead_code)]
-fn struct_from<T>(mem: &Memory, offset: i32) -> &T {
-    unsafe { std::mem::transmute::<&u8, &T>(
-        &mem.data_unchecked()[offset as usize]
-    )}
-}
-
-
 // Get the Memory object from the wasm caller.
 fn mem_from(caller: &Caller) -> Result<Memory, Trap> {
     match caller.get_export("memory") {
         Some(wasmtime::Extern::Memory(mem)) => Ok(mem),
         _ => Err(Trap::new("failed to get caller's exported memory")),
     }
+}
+
+
+// get a slice at offset and length in the caller's wasm memory.
+fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Trap> {
+    unsafe { mem.data_unchecked() }    // get caller's wasm memory as a slice
+        .get(offset as u32 as usize..(offset + length) as u32 as usize) // get sub-slice
+        .ok_or(Trap::new("pointer or length out of range"))
+}
+
+// transmute a slice of caller's wasm memory to a struct reference.
+fn struct_from<T>(mem: &Memory, offset: i32, length: i32) -> Result<&T, Trap> {
+    if length as u32 as usize != std::mem::size_of::<T>() {
+        return Err(Trap::new("struct length not equal to slice size"));
+    }
+    Ok(
+        unsafe {
+            transmute::<*const u8, &T>(
+                slice_from(&mem, offset, length)? // Err if offset/len out of bounds
+                .as_ptr()
+            )
+        }
+    )
 }
 
 fn log_int(i: i32) {
@@ -85,19 +89,10 @@ fn log_ab(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
 fn log_struct<T>(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap>
 where T: Sized + Copy + Debug
 {
-
     // get the caller's wasm memory
     let mem :Memory = mem_from(&caller)?;
-    // get a slice at the given offset and length
-    // get a slice at the given offset and length
-    let slice :&[u8] = slice_from(&mem, offset, length)?;
-    // deserialize a struct from the slice
-    let t :&T = {
-        if slice.len() != std::mem::size_of::<T>() {
-            return Err(Trap::new("invalid struct T size"));
-        }
-        unsafe { std::mem::transmute::<*const u8, &T>(slice.as_ptr()) }
-    };
+    // get ref to struct in slice at the given offset and length
+    let t :&T = struct_from(&mem, offset, length)?;
     println!("struct: {:?}", t);
     Ok(())
 }
