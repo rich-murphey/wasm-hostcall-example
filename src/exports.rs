@@ -44,12 +44,12 @@ fn slice_from<'a>(mem: &'a Memory, offset: i32, length: i32) -> Result<&[u8], Tr
 // transmute a slice of caller's wasm memory to a struct reference.
 fn struct_from<T>(mem: &Memory, offset: i32, length: i32) -> Result<&T, Trap> {
     if length as u32 as usize != std::mem::size_of::<T>() {
-        return Err(Trap::new("struct length not equal to slice size"));
+        return Err(Trap::new("struct size not equal to slice length"));
     }
     Ok(
         unsafe {
             transmute::<*const u8, &T>(
-                slice_from(&mem, offset, length)? // Err if offset/len out of bounds
+                slice_from(&mem, offset, length)? // Err if offset or length out of range
                 .as_ptr()
             )
         }
