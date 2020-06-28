@@ -23,21 +23,18 @@ One limitation is, WebAssembly is 32-bit while the application is
 64-bit. Wasm pointers are a 32-bit offset in a byte array that
 represents the WebAssembly Virtual Mahcine memory. 32-bit Wasm
 pointers must be indexed into the Wasm memory to obtain a 64-bit
-address.
+address. Another limitations is, in low-level assembly, arguments are
+limited to integer and floating point numbers.
 
-Another limitations is, in low-level assembly, arguments are limited
-to integer and floating point numbers.  In order to pass a string, the
-offset and length are passed instead.  The runtime does some of this
-for us.  When a Wasm module passes a &[u8] or &str, Wasmtime passes
-two parameters, the 32-bit offset and length. 
-
-Passing struct or object references requires addtional code on the
-WebAssembly side. To pass an arbitrary object, we serialized a copy
-and pass the offset and length of the copy instead. To pass a fixed
-size struct that contains no pointers (i.e. implements the Copy
-trait), we pass the the offset and size instead.  Note: this does not
-address security issues, which motivate additional validation and
-sandboxing techniques such as [RLBox].
+[Wasm-bindgen][[wasmbindgen] handles some of this. It converts a &[u8]
+or &str, argument into parameters, the 32-bit offset and length.
+However, passing struct or object references from Wasm requires
+addtional code. To pass an arbitrary object, we serialized a copy and
+pass the offset and length of the copy instead. To pass a fixed size
+struct that contains no pointers (i.e. implements the Copy trait), we
+pass the the offset and size instead.  Note: this does not address
+security issues, which motivate additional validation and sandboxing
+techniques such as [RLBox].
 
 Suggestions and comments are welcome. Please feel to open an issue if
 you can suggest better ways of writing these, or find parts that are
@@ -144,3 +141,4 @@ for the corresponding code for the other functions in the API.
 [webassembly]: https://webassembly.org
 [wasmtime]: https://github.com/bytecodealliance/wasmtime
 [RLBox]: https://plsyssec.github.io/rlbox_sandboxing_api/sphinx/
+[wasmbindgen]: https://github.com/rustwasm/wasm-bindgen
