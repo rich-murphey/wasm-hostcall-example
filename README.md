@@ -99,9 +99,6 @@ pub struct CD {
 }
 ```
 
-Note that log_int() and log_str() do not need any additional
-conversion on the Wasm side.
-
 The WebAssembly (Wasm) function hello() in [wasm/src/lib.rs](wasm/src/lib.rs) calls the above functions.
 ```rust
 pub fn hello() -> Result<i32,JsValue> {
@@ -113,7 +110,11 @@ pub fn hello() -> Result<i32,JsValue> {
 }
 ```
 
-The Wasm side of the API is defined in [wasm/src/imports.rs](wasm/src/imports.rs).
+The Wasm side of the API is defined in
+[wasm/src/imports.rs](wasm/src/imports.rs).  Note that log_int() and
+log_str() do not need any additional conversion on the Wasm side.
+
+
 The host (application) side of the API is defined in [src/exports.rs](src/exports.rs):
 ```rust
 // Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
