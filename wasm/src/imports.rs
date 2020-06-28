@@ -13,22 +13,10 @@ use {
 #[wasm_bindgen]
 extern {
     // Note: the bindings may mis-map when the order is changed.
-    fn log_int_raw(s: i32);
-    fn log_str_raw(s: &[u8]);
     fn log_ab_raw(s: &[u8]);
     fn log_cd_raw(s: &[u8]);
-}
-
-// log an integer
-pub fn log_int(s: i32) {
-    log_int_raw(s)
-}
-
-// log a string
-pub fn log_str(s: &str) {
-    // convert the string to a slice (&[u8]}, and pass it to the host.
-    // Note: When Wasm passes &[u8], the host recieves offset: i32, length: i32.
-    log_str_raw(s.as_bytes());
+    pub fn log_str(s: &str);
+    pub fn log_int(s: i32);
 }
 
 // Both this application and the WebAssembly file include the struct definitions.

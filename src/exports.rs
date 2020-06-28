@@ -109,9 +109,9 @@ where T: Sized + Copy + Debug
 pub fn get_funcs(store: &Store) -> Vec<wasmtime::Extern> {
     vec![
         // Note: the bindings may mis-map when the order is changed.
-        Func::wrap(store, log_int).into(),
-        Func::wrap(store, log_str).into(),
         Func::wrap(store, log_ab).into(),
         Func::wrap(store, log_struct::<CD>).into(),
+        Func::wrap(store, log_str).into(),
+        Func::wrap(store, log_int).into(),
     ]
 }
