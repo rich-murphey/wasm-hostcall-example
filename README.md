@@ -29,14 +29,15 @@ Another limitations is, in low-level assembly, arguments are limited
 to integer and floating point numbers.  In order to pass a string, the
 offset and length are passed instead.  The runtime does some of this
 for us.  When a Wasm module passes a &[u8] or &str, Wasmtime passes
-two parameters, the 32-bit offset and length.
+two parameters, the 32-bit offset and length. 
 
-In these examples, to pass an arbitrary object, the offset and length
-of a serialized copy is passed instead. To pass a fixed size struct
-that contains no pointers (i.e. implements the Copy trait), the offset
-and size is passed instead.  Note however that this does not address
-other security issues, which motivate validation and sandboxing
-techniques such as [RLBox].
+Passing struct or object references requires addtional code on the
+WebAssembly side. To pass an arbitrary object, we serialized a copy
+and pass the offset and length of the copy instead. To pass a fixed
+size struct that contains no pointers (i.e. implements the Copy
+trait), we pass the the offset and size instead.  Note: this does not
+address security issues, which motivate additional validation and
+sandboxing techniques such as [RLBox].
 
 Suggestions and comments are welcome. Please feel to open an issue if
 you can suggest better ways of writing these, or find parts that are
@@ -82,7 +83,7 @@ Here is the interface in Wasm Rust code:
 ```rust
 fn log_int(s: i32);
 fn log_str(s: &str);
-fn log_ab(ab: &AB); // serialized
+fn log_ab(ab: &AB); // serialized copy
 fn log_cd(cd: &CD); // zero copy
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -98,6 +99,9 @@ pub struct CD {
 }
 ```
 
+Note that log_int() and log_str() do not need any additional
+conversion on the Wasm side.
+
 The WebAssembly (Wasm) function hello() in [wasm/src/lib.rs](wasm/src/lib.rs) calls the above functions.
 ```rust
 pub fn hello() -> Result<i32,JsValue> {
@@ -110,18 +114,10 @@ pub fn hello() -> Result<i32,JsValue> {
 ```
 
 The Wasm side of the API is defined in [wasm/src/imports.rs](wasm/src/imports.rs).
-```rust
-pub fn log_str(s: &str) {
-    // convert the string to a slice (&[u8]}, and pass it to the host.
-    // Note: When Wasm passes &[u8], the host receives offset: i32, length: i32.
-    log_str_raw(s.as_bytes());
-}
-```
-
 The host (application) side of the API is defined in [src/exports.rs](src/exports.rs):
 ```rust
 // Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
-fn log_str_raw(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
+fn log_str(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
     // get the caller's Wasm memory
     let mem :Memory = mem_from(&caller)?;
     // get a slice at the given offset and length
