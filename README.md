@@ -21,13 +21,13 @@ functions between WebAssembly and host will almost certaily
 evolve. This demo is intended to show how to work within certain
 interim limitations on argument types.
 
-One limitation is, [WebAssembly] (Wasm) is 32-bit while the application
-is 64-bit. Wasm pointers are a 32-bit offset in a byte array of
-Virtual Machine memory. To obtain a 64-bit address on the host side,
-Wasm pointers must be indexed into VM memory. Fat pointers function
-arguments such as &[u8] or &str parameter are handled transparently on
-the WebAssembly side, but on the host side, they are received as two
-separate arguments, the 32-bit offset and length.
+One limitation is, [WebAssembly] (Wasm) is 32-bit while the
+application is 64-bit. Wasm pointers are a 32-bit offset in a byte
+array of Virtual Machine (VM) memory. To obtain a 64-bit address on
+the host side, Wasm pointers must be indexed into VM memory. Fat
+pointers such as &[u8] or &str parameter are handled transparently on
+the WebAssembly side; however, on the host side, they are received as
+two separate arguments, the 32-bit offset and length.
 
 An additional limitation is pointers to structs.  Passing a pointer to
 a struct requires additional code for both WebAssembly and host. We
