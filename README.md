@@ -17,7 +17,7 @@ information could be obsoleted or changed as new features are
 released. This demo is intended to show how things currently work, and
 certain interim limitations on argument types.
 
-One limitation is, WebAssembly (Wasm) is 32-bit while the application
+One limitation is, [WebAssembly] (Wasm) is 32-bit while the application
 is 64-bit. Wasm pointers are a 32-bit offset in a byte array of
 Virtual Machine memory. To obtain a 64-bit address on the host side,
 Wasm pointers must be indexed into VM memory. Fat pointers function
@@ -33,9 +33,6 @@ have examples for two kinds of structs:
 * structs that have the Serialize trait -- can be serialized. We
   serialized it and pass the offset and length of the serialized copy
   instead. Members can be String, Vec and other dynamic sized types.
-
-Note: this does not address security issues, which motivate additional
-validation and sand-boxing techniques such as [RLBox].
 
 ## Prerequisites
 
