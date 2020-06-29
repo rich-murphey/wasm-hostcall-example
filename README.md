@@ -1,21 +1,25 @@
 ## Contents
-* [WebAssembly calling Host functions](#webassembly-calling-host-functions)
+* [WebAssembly passing Structs to Host functions](#webassembly-passing-structs-to-host-functions)
 * [Prerequisites](#prerequisites)
 * [Building](#building)
 * [Code Samples](#code-samples)
       
-## WebAssembly calling Host functions
+## WebAssembly passing Structs to Host functions
 
-This demo shows how a Rust [WebAssembly] (Wasm) module can call
-functions in a Rust application.  The Rust application uses [Wasmtime]
-to load and run a Rust WebAssembly library, also written in Rust. The
-WebAssembly library calls functions in the the Rust host application.
+This demo shows [WebAssembly] (Wasm) calling host (application)
+functions, where both Wasm and application are in Rust.  In
+particular, Wasm is passing references to objects that have either
+static or dynamic size.
 
-[Wasmtime] is quite new and evolving, especially new features to
-import and export functions between WebAssembly and host.  So, this
-information could be obsoleted or changed as new features are
-released. This demo is intended to show how things currently work, and
-certain interim limitations on argument types.
+[Wasmtime] is an embedded WebAssembly VM.  The Rust application uses
+[Wasmtime] to load and run a Rust WebAssembly library, also written in
+Rust. The WebAssembly library calls functions in the the Rust host
+application.
+
+[Wasmtime] is new and evolving. Features to import and export
+functions between WebAssembly and host will almost certaily
+evolve. This demo is intended to show how to work within certain
+interim limitations on argument types.
 
 One limitation is, [WebAssembly] (Wasm) is 32-bit while the application
 is 64-bit. Wasm pointers are a 32-bit offset in a byte array of
@@ -33,6 +37,11 @@ have examples for two kinds of structs:
 * structs that have the Serialize trait -- can be serialized. We
   serialized it and pass the offset and length of the serialized copy
   instead. Members can be String, Vec and other dynamic sized types.
+
+There are tradeoffs. 
+* serializtion verifies the struct's field types
+* directly passing 'Copy' structs does not, but is faster.
+* in both examples here, the size of the sruct is verified. 
 
 ## Prerequisites
 
@@ -128,7 +137,7 @@ for the corresponding code for the other functions in the API.
   API.  Fastly's Terrarium runs customer's WebAssembly in a edge web
   server. Customer's WebAssembly module handles specified http requests.
 * Cloudflare's [Wirefilter](https://github.com/cloudflare/wirefilter), 
-  runs customers Wireshark-like filters in WebAssembly on edge compute.
+  runs customers Wireshark-like filters in WebAssembly on edge compute.* 
 
 Suggestions and comments are welcome. Please feel free to open an
 issue if you can suggest improvements, or find parts that are unclear.
