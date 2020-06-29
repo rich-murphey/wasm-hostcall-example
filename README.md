@@ -11,10 +11,10 @@ functions, where both Wasm and application are in Rust.  In
 particular, Wasm is passing references to objects that have either
 static or dynamic size.
 
-[Wasmtime] is an embedded WebAssembly VM.  The Rust application uses
-[Wasmtime] to load and run a Rust WebAssembly library, also written in
-Rust. The WebAssembly library calls functions in the the Rust host
-application.
+[Wasmtime] is an embedded WebAssembly virtual machine runtime.  The
+Rust application uses [Wasmtime] to load and run a Rust WebAssembly
+module, also written in Rust. The WebAssembly module calls functions
+in the the Rust host application.
 
 [Wasmtime] is new and evolving. Features to import and export
 functions between WebAssembly and host will almost certaily
