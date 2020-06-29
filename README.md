@@ -18,9 +18,9 @@ released. This demo is intended to show how things currently work, and
 certain interim limitations on argument types.
 
 One limitation is, WebAssembly (Wasm) is 32-bit while the application
-is 64-bit. Wasm pointers are a 32-bit offset in a byte array of Wasm
+is 64-bit. Wasm pointers are a 32-bit offset in a byte array of
 Virtual Machine memory. To obtain a 64-bit address on the host side,
-Wasm pointers are indexed into the Wasm memory. Fat pointers function
+Wasm pointers must be indexed into VM memory. Fat pointers function
 arguments such as &[u8] or &str parameter are handled transparently on
 the WebAssembly side, but on the host side, they are received as two
 separate arguments, the 32-bit offset and length.
