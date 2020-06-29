@@ -76,7 +76,7 @@ fn log_str(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
 }
 
 // Both this application and the WebAssembly file include this struct definition.
-include!("model.rs");
+include!("models.rs");
 
 // Given a serialized Rust Message Pack struct at an offset and
 // length in caller's wasm memory, log it to stdout.

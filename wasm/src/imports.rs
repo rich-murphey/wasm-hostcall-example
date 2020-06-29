@@ -6,26 +6,30 @@ use {
         Deserialize,
         Serialize
     },
-    wasm_bindgen::prelude::*,
     arrayvec::ArrayString,
 };
 
-#[wasm_bindgen]
-extern {
-    // Note: the bindings may mis-map when the order is changed.
-    fn log_ab_raw(s: &[u8]);
-    fn log_cd_raw(s: &[u8]);
-    pub fn log_str(s: &str);
-    pub fn log_int(s: i32);
+mod raw {
+    use wasm_bindgen::prelude::wasm_bindgen;
+    #[wasm_bindgen]
+    extern {
+        // Note: the bindings may mis-map when the order is changed.
+        pub fn log_ab(s: &[u8]);
+        pub fn log_cd(s: &[u8]);
+        pub fn log_str(s: &str);
+        pub fn log_int(s: i32);
+    }
 }
+pub use raw::log_str;           // export these as-is
+pub use raw::log_int;
 
-// Both this application and the WebAssembly file include the struct definitions.
-include!("../../src/model.rs");
+// Both this application and the WebAssembly file
+// include the struct definitions.
+include!("../../src/models.rs");
 
 // log a struct
 pub fn log_ab(ab: &AB) {
-    // serialized struct to a slice, and pass it
-    log_ab_raw(&rmp_serde::to_vec(ab).unwrap());
+    raw::log_ab(&rmp_serde::to_vec(ab).unwrap()); // slice containing serialized struct
 }
 
 fn any_as_u8_slice<T: Sized>(p: &T) -> &[u8] {
@@ -39,15 +43,13 @@ fn any_as_u8_slice<T: Sized>(p: &T) -> &[u8] {
 
 // log a struct that implements Copy and Debug
 pub fn log_struct<T, LogFn>(t: &T, f: LogFn)
-where T: Sized + Copy + Debug,
+where T:  Copy + Debug,
       LogFn: Fn(&[u8]),
 {
-    // serialized struct to a slice
-    let slice = any_as_u8_slice::<T>(t);
-    // pass the offset and len of the slice
-    f(slice);
+    let slice = any_as_u8_slice::<T>(t); // slice containing struct, zero-copy
+    f(slice);                  // pass the offset and len of the slice
 }
 
 pub fn log_cd(cd: &CD) {
-    log_struct(cd, log_cd_raw);
+    log_struct(cd, raw::log_cd);
 }
