@@ -104,11 +104,11 @@ The host (application) side of the API is defined in [src/exports.rs](src/export
 ```rust
 // Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
 fn log_str(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
-    let mem :Memory = mem_from(&caller)?;                  // get caller's Wasm memory
-    let slice :&[u8] = slice_from(&mem, offset, length)?;  // get string's byte slice
-    let string :&str = std::str::from_utf8(slice)          // convert to utf-8
+    let mem :Memory = mem_from(&caller)?;                 // caller's VM memory
+    let slice :&[u8] = slice_from(&mem, offset, length)?; // string's byte slice
+    let string :&str = std::str::from_utf8(slice)         // convert to utf-8
         .or_else(|_|Err(Trap::new("invalid utf-8")))?;
-    println!("str: {}", string);                           // print the string
+    println!("str: {}", string);                          // print the string
     Ok(())
 }
 ```
