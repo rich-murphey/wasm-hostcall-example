@@ -124,9 +124,11 @@ for the corresponding code for the other functions in the API.
   Interface](https://github.com/bytecodealliance/wasi) is analogous to
   parts of libc.
 * Fastly's
-[http_guest](https://wasm.fastlylabs.com/docs/rust/http_guest/hostcalls/index.html)
-API.  The Rust application (host) is a web server, while the WebAssembly
-module handles specific http requests.
+  [http_guest](https://wasm.fastlylabs.com/docs/rust/http_guest/hostcalls/index.html)
+  API.  Fastly's Terrarium runs customer's WebAssembly in a edge web
+  server. Customer's WebAssembly module handles specified http requests.
+* Cloudflare's [Wirefilter](https://github.com/cloudflare/wirefilter), 
+  runs customers Wireshark-like filters in WebAssembly on edge compute.
 
 Suggestions and comments are welcome. Please feel free to open an
 issue if you can suggest improvements, or find parts that are unclear.
