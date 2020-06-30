@@ -29,21 +29,22 @@ This demo is intended to show how to work within certain interim
 limitations on argument types.
 
 One limitation is, [WebAssembly] (Wasm) is 32-bit while the
-application is 64-bit. Wasm pointers are a 32-bit offset in a byte
-array of Virtual Machine (VM) memory. To obtain a 64-bit address on
-the host side, Wasm pointers must be indexed into VM memory. Fat
-pointers such as &[u8] or &str parameter are handled transparently on
-the WebAssembly side; however, on the host side, they are received as
-two separate arguments, the 32-bit offset and length.
+application is 64-bit. Wasm pointers are a 32-bit offset in Virtual
+Machine (VM) memory. To obtain a 64-bit address on the host side, Wasm
+pointers must be indexed into VM memory's byte array. Fat pointers
+such as &[u8] or &str parameter are handled transparently on the
+WebAssembly side; however, on the host side, they are received as two
+separate arguments, the 32-bit offset and size.
 
 An additional limitation is pointers to structs.  Passing a pointer to
-a struct requires additional code for both WebAssembly and host. This
-demo shows examples for two kinds of structs:
-* Structs that have the Copy trait &mdash; a fixed size and no
-  pointer fields. We pass the the offset and size of the struct.
+a struct (e.g. &struct) requires additional code in both WebAssembly
+and the host application. This demo shows examples for two kinds of
+structs:
 * Structs that have the Serialize trait. We
   serialize it and pass the offset and length of the serialized copy
   instead. Fields can be String, Vec and other dynamic sized types.
+* Structs that have the Copy trait &mdash; a fixed size and no
+  pointer fields. We pass the the offset and size of the struct itself.
 
 There are certain trade-offs. 
 * Serialization verifies the struct's field types.
@@ -116,10 +117,10 @@ log_str() do not need any additional conversion on the WebAssembly side.
 
 The host (application) side of the API is defined in [src/exports.rs](src/exports.rs):
 ```rust
-// Given a rust &str at an offset and length in caller's Wasm memory, log it to stdout.
-fn log_str(caller: Caller<'_>, offset: i32, length: i32) -> Result<(), Trap> {
+// Given a rust &str at an offset and size in caller's Wasm memory, log it to stdout.
+fn log_str(caller: Caller<'_>, offset: i32, size: i32) -> Result<(), Trap> {
     let mem :Memory = mem_from(&caller)?;                 // caller's VM memory
-    let slice :&[u8] = slice_from(&mem, offset, length)?; // string's byte slice
+    let slice :&[u8] = slice_from(&mem, offset, size)?; // string's byte slice
     let string :&str = std::str::from_utf8(slice)         // convert to utf-8
         .or_else(|_|Err(Trap::new("invalid utf-8")))?;
     println!("str: {}", string);                          // print the string

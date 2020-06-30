@@ -23,8 +23,7 @@ mod raw {
 pub use raw::log_str;           // export these as-is
 pub use raw::log_int;
 
-// Both this application and the WebAssembly file
-// include the struct definitions.
+// The application and WebAssembly include identical struct definitions.
 include!("../../src/models.rs");
 
 // log a struct
@@ -47,7 +46,7 @@ where T:  Copy + Debug,
       LogFn: Fn(&[u8]),
 {
     let slice = any_as_u8_slice::<T>(t); // slice containing struct, zero-copy
-    f(slice);                  // pass the offset and len of the slice
+    f(slice);                          // pass the offset and size of the slice
 }
 
 pub fn log_cd(cd: &CD) {
