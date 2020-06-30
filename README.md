@@ -20,10 +20,10 @@ the host application.
 functions between WebAssembly and host will almost certainly be
 enhanced. Here are some production uses:
 
-* Fastly uses this interface in their [http_guest] API, to run
-customer Wasm http servers on edge compute.  
-* Cloudflare uses this for a
-Wireshark filter API, [Wirefilter] for customer firewall at the edge.
+* Fastly provides a Wasm [http_guest] API, to run
+customer Wasm http servers on edge compute.
+* Cloudflare providea a Wasm Wireshark firewall API, [Wirefilter], to
+run customer firewall at the edge.
 
 This demo is intended to show how to work within certain interim
 limitations on argument types.
