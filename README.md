@@ -32,9 +32,9 @@ One limitation is, [WebAssembly] (Wasm) is 32-bit while the
 application is 64-bit. Wasm pointers are a 32-bit offset in Virtual
 Machine (VM) memory. To obtain a 64-bit address on the host side, Wasm
 pointers must be indexed into VM memory's byte array. Fat pointers
-such as &[u8] or &str parameter are handled transparently on the
-WebAssembly side; however, on the host side, they are received as two
-separate arguments, the 32-bit offset and size.
+such as &[u8] or &str are handled transparently on the WebAssembly
+side; however, on the host side, they are received as two separate
+arguments, the 32-bit offset and size.
 
 An additional limitation is pointers to structs.  Passing a pointer to
 a struct (e.g. &struct) requires additional code in both WebAssembly
