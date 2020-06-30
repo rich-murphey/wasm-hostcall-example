@@ -20,8 +20,8 @@ the host application.
 functions between WebAssembly and host will almost certainly be
 enhanced. Here are some production uses:
 
-* Fastly provides a Wasm [http_guest] API, to run
-customer Wasm http servers on edge compute.
+* Fastly provides a [http_guest] API, to run
+customer WebAssembly (Wasm) http servers on edge compute.
 * Cloudflare provides a Wasm Wireshark firewall API, [Wirefilter], to
 run customer Wasm firewall at the edge.
 
