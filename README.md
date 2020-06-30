@@ -39,7 +39,7 @@ two separate arguments, the 32-bit offset and length.
 An additional limitation is pointers to structs.  Passing a pointer to
 a struct requires additional code for both WebAssembly and host. This
 demo shows examples for two kinds of structs:
-* Structs that have the Copy trait --- a fixed size and no
+* Structs that have the Copy trait &mdash; a fixed size and no
   pointers. We pass the the offset and size of the struct.
 * Structs that have the Serialize trait. We
   serialized it and pass the offset and length of the serialized copy
