@@ -17,9 +17,13 @@ module. This demo shows the WebAssembly module calling functions in
 the host application.
 
 [Wasmtime] is new and evolving. Features to import and export
-functions between WebAssembly and host will almost certainly
-evolve. This demo is intended to show how to work within certain
-interim limitations on argument types.
+functions between WebAssembly and host will almost certainly be
+enhanced. Fastly uses this interface in their [http_guest] API, to run
+customer Wasm http servers on edge compute.  Cloudflare uses this for a
+Wireshark filter API, [Wirefilter] for customer firewall at the edge.
+
+This demo is intended to show how to work within certain interim
+limitations on argument types.
 
 One limitation is, [WebAssembly] (Wasm) is 32-bit while the
 application is 64-bit. Wasm pointers are a 32-bit offset in a byte
@@ -146,3 +150,6 @@ issue if you can suggest improvements, or find parts that are unclear.
 [Wasmtime]: https://github.com/bytecodealliance/wasmtime
 [RLBox]: https://plsyssec.github.io/rlbox_sandboxing_api/sphinx/
 [wasm-bindgen]: https://github.com/rustwasm/wasm-bindgen
+[http_guest]: https://wasm.fastlylabs.com/docs/rust/http_guest/hostcalls/index.html
+[Wirefilter]: https://github.com/cloudflare/wirefilter
+
