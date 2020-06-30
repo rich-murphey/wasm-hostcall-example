@@ -18,8 +18,11 @@ the host application.
 
 [Wasmtime] is new and evolving. Features to import and export
 functions between WebAssembly and host will almost certainly be
-enhanced. Fastly uses this interface in their [http_guest] API, to run
-customer Wasm http servers on edge compute.  Cloudflare uses this for a
+enhanced. Here are some production uses:
+
+* Fastly uses this interface in their [http_guest] API, to run
+customer Wasm http servers on edge compute.  
+* Cloudflare uses this for a
 Wireshark filter API, [Wirefilter] for customer firewall at the edge.
 
 This demo is intended to show how to work within certain interim
