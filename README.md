@@ -22,7 +22,7 @@ enhanced. Here are some production uses:
 
 * Fastly provides a Wasm [http_guest] API, to run
 customer Wasm http servers on edge compute.
-* Cloudflare providea a Wasm Wireshark firewall API, [Wirefilter], to
+* Cloudflare provides a Wasm Wireshark firewall API, [Wirefilter], to
 run customer Wasm firewall at the edge.
 
 This demo is intended to show how to work within certain interim
@@ -42,8 +42,8 @@ demo shows examples for two kinds of structs:
 * Structs that have the Copy trait &mdash; a fixed size and no
   pointer fields. We pass the the offset and size of the struct.
 * Structs that have the Serialize trait. We
-  serialized it and pass the offset and length of the serialized copy
-  instead. Members can be String, Vec and other dynamic sized types.
+  serialize it and pass the offset and length of the serialized copy
+  instead. Fields can be String, Vec and other dynamic sized types.
 
 There are trade-offs. 
 * Serialization verifies the struct's field types.
