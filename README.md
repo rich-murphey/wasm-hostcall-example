@@ -17,7 +17,7 @@ module. This demo shows the WebAssembly module calling functions in
 the host application.
 
 [Wasmtime] is new and evolving. Features to import and export
-functions between WebAssembly and host will almost certaily
+functions between WebAssembly and host will almost certainly
 evolve. This demo is intended to show how to work within certain
 interim limitations on argument types.
 
@@ -38,10 +38,10 @@ have examples for two kinds of structs:
   serialized it and pass the offset and length of the serialized copy
   instead. Members can be String, Vec and other dynamic sized types.
 
-There are tradeoffs. 
-* serializtion verifies the struct's field types
+There are trade-offs. 
+* serialization verifies the struct's field types
 * directly passing 'Copy' structs does not, but is faster.
-* in both examples here, the size of the sruct is verified. 
+* in both examples here, the size of the struct is verified. 
 
 ## Prerequisites
 
