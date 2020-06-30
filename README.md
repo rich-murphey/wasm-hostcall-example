@@ -37,18 +37,18 @@ the WebAssembly side; however, on the host side, they are received as
 two separate arguments, the 32-bit offset and length.
 
 An additional limitation is pointers to structs.  Passing a pointer to
-a struct requires additional code for both WebAssembly and host. We
-have examples for two kinds of structs:
-* structs that have the Copy trait -- are a fixed size and contain no
+a struct requires additional code for both WebAssembly and host. This
+demo shows examples for two kinds of structs:
+* Structs that have the Copy trait -- are a fixed size and contain no
   pointers. We pass the the offset and size of the struct.
-* structs that have the Serialize trait -- can be serialized. We
+* Structs that have the Serialize trait -- can be serialized. We
   serialized it and pass the offset and length of the serialized copy
   instead. Members can be String, Vec and other dynamic sized types.
 
 There are trade-offs. 
-* serialization verifies the struct's field types
-* directly passing 'Copy' structs does not, but is faster.
-* in both examples here, the size of the struct is verified. 
+* Serialization verifies the struct's field types.
+* Directly passing 'Copy' structs does not, but is faster.
+* In both examples here, the size of the struct is verified.
 
 ## Prerequisites
 
