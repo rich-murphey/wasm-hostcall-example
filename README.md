@@ -45,10 +45,10 @@ demo shows examples for two kinds of structs:
   serialize it and pass the offset and length of the serialized copy
   instead. Fields can be String, Vec and other dynamic sized types.
 
-There are trade-offs. 
+There are certain trade-offs. 
 * Serialization verifies the struct's field types.
-* Directly passing 'Copy' structs does not, but is faster.
-* In both examples here, the size of the struct is verified.
+* Directly passing 'Copy' structs does not, and is faster.
+In both examples here, the size of the struct is verified.
 
 ## Prerequisites
 
