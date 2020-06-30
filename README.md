@@ -48,6 +48,7 @@ demo shows examples for two kinds of structs:
 There are certain trade-offs. 
 * Serialization verifies the struct's field types.
 * Directly passing 'Copy' structs does not, and is faster.
+
 In both examples here, the size of the struct is verified.
 
 ## Prerequisites
