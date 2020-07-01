@@ -78,7 +78,7 @@ cargo run
 ```
 ## Code Samples
 
-The the WebAssembly imports functions from the Rust host to demonstrate
+Rust WebAssembly imports these functions from the Rust host to demonstrate
 passing various argument types:
 ```rust
 fn log_int(s: i32)   // passes an integer
