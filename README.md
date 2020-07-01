@@ -20,10 +20,10 @@ the host application.
 functions between WebAssembly and host will almost certainly be
 enhanced. Here are some production uses:
 
-* Fastly provides a [http_guest] API, to run
-customer WebAssembly (Wasm) http servers on edge compute.
+* Fastly provides a [http_guest] API, to run customer WebAssembly
+  (Wasm) http servers on edge compute.
 * Cloudflare provides a Wasm Wireshark firewall API, [Wirefilter], to
-run customer Wasm firewall at the edge.
+  run customer Wasm firewall at the edge.
 
 This demo is intended to show how to work within certain interim
 limitations on argument types.
@@ -147,6 +147,13 @@ for the corresponding code for the other functions in the API.
   server. Customer's WebAssembly module handles specified http requests.
 * Cloudflare's [Wirefilter](https://github.com/cloudflare/wirefilter), 
   runs customers Wireshark-like filters in WebAssembly on edge compute.* 
+* The [Deno plugin
+  API](https://github.com/denoland/deno/blob/master/core/plugin_api.rs)
+  is an interface between host native Rust and either Wasm or Javascript: [Rust host plugin
+  example](https://github.com/denoland/deno/blob/master/test_plugin/src/lib.rs), 
+[client javascript
+  example](https://github.com/denoland/deno/blob/master/test_plugin/tests/test.js),
+  [blog post](https://medium.com/@enzoalbornoz/como-desenvolver-plugins-nativos-em-rust-para-deno-ecb2676ac8d3).
 
 Suggestions and comments are welcome. Please feel free to open an
 issue if you can suggest improvements, or find parts that are unclear.
