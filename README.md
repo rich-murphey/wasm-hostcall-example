@@ -6,7 +6,7 @@
       
 ## WebAssembly passing Structs to Host functions
 
-This demo shows [WebAssembly] (Wasm) calling host (application)
+This demo shows [WebAssembly] (Wasm) calling host application
 functions, where both Wasm and application are in Rust.  In
 particular, Wasm is passing references to objects that have either
 static or dynamic size.
@@ -20,10 +20,12 @@ the host application.
 functions between WebAssembly and host will almost certainly be
 enhanced. Here are some production uses:
 
-* Fastly provides a [http_guest] API, to run customer WebAssembly
-  (Wasm) http servers on edge compute.
+* Fastly provides a [http_guest] API. Customers use this to deploy
+  Rust web apps on edge compute.
 * Cloudflare provides a Wasm Wireshark firewall API, [Wirefilter], to
-  run customer Wasm firewall at the edge.
+  run customer Wasm firewall at the edge. Cloudflare is expanding this
+  to [Web Application
+  Firewall](https://blog.cloudflare.com/making-the-waf-40-faster/).
 
 This demo is intended to show how to work within certain interim
 limitations on argument types.
